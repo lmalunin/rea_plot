@@ -1,36 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Plot from 'react-plotly.js';
 
-type SurfacePlotProps = {
-  data: Plotly.Data[];
-  layout: Partial<Plotly.Layout>;
-  handleClickProp?: (event: Readonly<Plotly.PlotMouseEvent>) => void;
-};
 
-export const SurfacePlot = (props: SurfacePlotProps) => {
-  const { data, layout } = props;
-  data.forEach((item) => {
-    if (item.type !== 'scatter3d') {
-      item.type = 'surface';
-    }
-  });
-  
-  const handleClick = (e: Readonly<Plotly.PlotMouseEvent>) => {
-    if (props.handleClickProp) {
-      props.handleClickProp(e);
-    }
-  };
-  return (
-      <Plot
-          data={data}
-          layout={layout}
-          config={{ modeBarButtons: false }}
-          onClick={handleClick}
-          // debug
-      />
-  );
-};
+let getTrace = (dataSrc: number[][], index: number) => {
+  return {
+    x: Array(14).fill(null).map((_, i) => index),
+    y: Array(14).fill(null).map((_, i) => i),
+    z: Array(14).fill(null).map((_, i) => dataSrc[i][index]),
+    mode: 'lines',
+    marker: {
+      color: 'red',
+      size: 12,
+      symbol: 'circle',
+      line: {
+        color: 'rgb(0,0,0)',
+        width: 0
+      }
+    },
+    line: {
+      color: 'red',
+      width: 5
+    },
+    type: 'scatter3d'
+  }
+}
 
 function App() {
   
@@ -66,27 +60,7 @@ function App() {
   console.log(x1)
   console.log(y1)
   
-  let trace1 = {
-    x: Array(14).fill(null).map((_, i) => graphIndex),
-    y: Array(14).fill(null).map((_, i) => i),
-    z: Array(14).fill(null).map((_, i) => zSurf[i][graphIndex]),
-    mode: 'lines',
-    marker: {
-      color: 'red',
-      size: 12,
-      symbol: 'circle',
-      line: {
-        color: 'rgb(0,0,0)',
-        width: 0
-      }
-    },
-    line: {
-      color: 'red',
-      width: 5
-    },
-    type: 'scatter3d'
-  };
-  
+  let trace1 = getTrace(zSurf, graphIndex)
   
   let trace2 = {
     x: [0, 1, 2, 3, 4, 5],
@@ -111,14 +85,27 @@ function App() {
   
   //Plotly.newPlot('graph', [data_z1,trace1,trace2]);
   
-  const data: any = [data_z1, trace1, trace2];
+  const graphOnClickHandler = ({ points }: any) => {
+    
+    let newTrace = getTrace(zSurf, points[0].x)
+    
+    let newData = [...data, newTrace];
+    
+    setData(newData);
+  }
+  
+  const [data, setData] = useState<any>([data_z1, trace1, trace2])
+  
+  
   const layout: Partial<Plotly.Layout> = {};
+  
   
   return (
       <div className="App">
         <Plot
             data={data}
             layout={layout}
+            onClick={graphOnClickHandler}
             // debug
         />
       </div>
