@@ -94,7 +94,7 @@ function App() {
     setData(newData);
   }
   
-  const [data, setData] = useState<any>([data_z1, trace1, trace2])
+  const [data, setData] = useState<any>([data_z1, trace2])
   
   
   const layout: Partial<Plotly.Layout> = {};
