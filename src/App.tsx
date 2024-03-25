@@ -164,6 +164,9 @@ function App() {
             
             <div style={debouncedSearchTerm}>
                 <img src="cat.jpg" alt="cat" width={50} height={50} style={{ objectFit: 'cover' }}/>
+                <div style={{ backgroundColor: 'red', color: 'white' }}>111</div>
+                <div style={{ backgroundColor: 'green', color: 'pink' }}>222</div>
+                <div style={{ backgroundColor: 'black', color: 'aqua' }}>333</div>
             </div>
         </div>
     );
