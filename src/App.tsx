@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import Plot from 'react-plotly.js';
-
+import { useDebounce } from '@uidotdev/usehooks';
 
 let getTrace = (dataSrc: number[][], index: number) => {
     return {
@@ -125,6 +125,9 @@ function App() {
         
         setStyleLines(newStyle)
     }
+    
+    const debouncedSearchTerm = useDebounce(styleLines, 200);
+    
     const linesOnUnHoverHandler = (e: any) => {
         console.log('linesOnUnHoverHandler', e);
         const newStyle = setCoordinates(e.event.clientX, e.event.clientY, 'none');
@@ -153,12 +156,12 @@ function App() {
             <Plot
                 data={dataLines}
                 layout={layoutLines}
-                onHover={linesOnHoverHandler}
-                onUnhover={linesOnUnHoverHandler}
+                onHover={(e) => linesOnHoverHandler(e)}
+                onUnhover={(e) => linesOnUnHoverHandler(e)}
                 // debug
             />
             
-            <div style={{ ...styleLines }}>
+            <div style={debouncedSearchTerm}>
                 <img src="cat.jpg" alt="cat" width={50} height={50} style={{ objectFit: 'cover' }}/>
             </div>
         </div>
