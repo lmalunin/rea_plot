@@ -104,7 +104,8 @@ function App() {
         x: [1, 2, 3, 4],
         y: [10, 15, 13, 17],
         type: 'scatter',
-        hoverinfo: 'none'
+        hoverinfo: 'none',
+        line: { color: '#7348ED', shape: 'spline' }
     };
     
     const traceLine2 = {
